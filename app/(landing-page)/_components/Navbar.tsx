@@ -26,7 +26,7 @@ const Navbar = () => {
         {isLoading && <Spinner />}
         {!isAuthenticated && !isLoading && (
           <>
-            <SignInButton mode="modal">
+            <SignInButton fallbackRedirectUrl="/documents" mode="modal">
               <Button variant="ghost" size="sm">
                 Log in
               </Button>
@@ -39,7 +39,7 @@ const Navbar = () => {
         {isAuthenticated && !isLoading && (
           <>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/documents">Enter Jottter</Link>
+              <Link href="/documents">Enter Jotter</Link>
             </Button>
             <UserButton />
           </>
