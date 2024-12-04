@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 
 import { Toaster } from "sonner";
+import { ModalProvider } from "@/components/providers/modal-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -58,6 +59,7 @@ export default function RootLayout({
             storageKey="jotter-theme"
           >
             <Toaster position="bottom-center" richColors />
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </ConvexClientProvider>
