@@ -12,18 +12,19 @@ import { useParams } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
 
 export const CoverImageModal = () => {
-  const update = useMutation(api.documents.update);
+  const { edgestore } = useEdgeStore();
+  
   const params = useParams();
+  const coverImage = useCoverImage();
+  const update = useMutation(api.documents.update);
+  
+
   const [file, setFile] = useState<File>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const coverImage = useCoverImage();
-
-  const { edgestore } = useEdgeStore();
-
   const handleClose = () => {
     setFile(undefined);
-    setIsSubmitting(true);
+    setIsSubmitting(false);
     coverImage.onClose();
   };
 
@@ -34,6 +35,9 @@ export const CoverImageModal = () => {
 
       const res = await edgestore.publicFiles.upload({
         file,
+        options: {
+          replaceTargetUrl: coverImage.url,
+        },
       });
 
       await update({
