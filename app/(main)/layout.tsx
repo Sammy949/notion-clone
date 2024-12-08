@@ -5,6 +5,7 @@ import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
 import Navigation from "./_components/Navigation";
 import { SearchCommand } from "@/components/search-command";
+import { LoadingProvider } from "@/context/LoadingContext";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -23,11 +24,13 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="h-full flex dark:bg-[#1F1F1F]">
-      <Navigation />
-      <main className="flex-1 h-full overflow-y-auto">
-        <SearchCommand />
-        {children}
+      <LoadingProvider>
+        <Navigation />
+        <main className="flex-1 h-full overflow-y-auto">
+          <SearchCommand />
+          {children}
         </main>
+      </LoadingProvider>
     </div>
   );
 };

@@ -1,20 +1,17 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { useMutation, useQuery } from "convex/react";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
+
 import { api } from "@/convex/_generated/api";
 import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
-import { useMemo } from "react";
-import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useParams } from "next/navigation";
-import { useLoading } from "@/context/LoadingContext";
 
-export default function DocumentIdPage() {
+const DocumentIdPage = () => {
   const { documentId } = useParams();
-
-  const { setLoading } = useLoading();
-
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     []
@@ -22,19 +19,11 @@ export default function DocumentIdPage() {
 
   // @ts-ignore
   const document = useQuery(api.documents.getById, { documentId: documentId });
-
   const update = useMutation(api.documents.update);
 
   const onChange = (content: string) => {
-    console.log("Updating content:", content);
-    setLoading(true);
-
     // @ts-ignore
-    update({ id: documentId, content })
-      .then(() => setLoading(false))
-      .catch((error) => {
-        console.error("Failed to update content:", error);
-      });
+    update({ id: documentId, content });
   };
 
   if (document === undefined) {
@@ -53,21 +42,21 @@ export default function DocumentIdPage() {
     );
   }
 
-  if (document === null) {
-    return <div>Not found</div>;
-  }
+  if (document === null) return <div>Not found</div>;
 
   return (
     <div className="pb-40">
-      <Cover url={document.coverImage} />
+      <Cover preview url={document.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-        <Toolbar initialData={document} />
+        <Toolbar preview initialData={document} />
         <Editor
+          editable={false}
           onChange={onChange}
-          editable={true}
           initialContent={document.content}
         />
       </div>
     </div>
   );
-}
+};
+
+export default DocumentIdPage;

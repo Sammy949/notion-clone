@@ -3,11 +3,15 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { MenuIcon } from "lucide-react";
+import { Check, MenuIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { Title } from "./Title";
 import Banner from "./Banner";
 import { Menu } from "./Menu";
+import Publish from "./Publish";
+import { Spinner } from "@/components/spinner";
+import { useState } from "react";
+import { useLoading } from "@/context/LoadingContext";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -16,6 +20,7 @@ interface NavbarProps {
 
 const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const params = useParams();
+  const { loading } = useLoading();
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId as Id<"documents">,
   });
@@ -43,8 +48,16 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
           />
         )}
         <div className="flex items-center justify-between w-full">
-          <Title initialData={document} />
           <div className="flex items-center gap-x-2">
+            <Title initialData={document} />
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Check className="h-4 w-4 p-1 bg-green-600 rounded-full" />
+            )}
+          </div>
+          <div className="flex items-center gap-x-2">
+            <Publish initialData={document} />
             <Menu documentId={document._id} />
           </div>
         </div>
