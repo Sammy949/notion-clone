@@ -52,7 +52,7 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
             {loading ? (
               <Spinner />
             ) : (
-              <Check className="h-4 w-4 p-1 bg-green-600 rounded-full" />
+              <Check className="h-4 w-4 p-1 bg-green-600 rounded-full text-white" />
             )}
           </div>
           <div className="flex items-center gap-x-2">
