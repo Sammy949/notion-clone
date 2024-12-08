@@ -20,7 +20,7 @@ export default function DocumentIdPage() {
     []
   );
 
-  // @ts-ignore
+  // @ts-expect-error
   const document = useQuery(api.documents.getById, { documentId: documentId });
 
   const update = useMutation(api.documents.update);
@@ -29,7 +29,7 @@ export default function DocumentIdPage() {
     console.log("Updating content:", content);
     setLoading(true);
 
-    // @ts-ignore
+    // @ts-expect-error
     update({ id: documentId, content })
       .then(() => setLoading(false))
       .catch((error) => {

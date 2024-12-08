@@ -10,7 +10,6 @@ import Banner from "./Banner";
 import { Menu } from "./Menu";
 import Publish from "./Publish";
 import { Spinner } from "@/components/spinner";
-import { useState } from "react";
 import { useLoading } from "@/context/LoadingContext";
 
 interface NavbarProps {
