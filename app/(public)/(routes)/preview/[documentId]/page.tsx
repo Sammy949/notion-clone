@@ -12,7 +12,7 @@ import { Id } from "@/convex/_generated/dataModel";
 
 interface DocumentIdPageProps {
   params: {
-    documentId: Id<"documents">;
+    documentId: string;
   };
 }
 
@@ -23,12 +23,13 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   );
 
   const document = useQuery(api.documents.getById, {
-    documentId: params.documentId,
+    documentId: params.documentId as Id<"documents">,
   });
+
   const update = useMutation(api.documents.update);
 
   const onChange = (content: string) => {
-    update({ id: params.documentId, content });
+    update({ id: params.documentId as Id<"documents">, content });
   };
 
   if (document === undefined) {

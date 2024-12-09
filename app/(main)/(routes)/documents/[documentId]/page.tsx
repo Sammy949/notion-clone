@@ -12,7 +12,7 @@ import { Id } from "@/convex/_generated/dataModel";
 
 interface DocumentIdPageProps {
   params: {
-    documentId: Id<"documents">;
+    documentId: string;
   };
 }
 
@@ -23,9 +23,9 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     []
   );
-
+  
   const document = useQuery(api.documents.getById, {
-    documentId: params.documentId,
+    documentId: params.documentId as Id<"documents">,
   });
 
   const update = useMutation(api.documents.update);
@@ -34,7 +34,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     console.log("Updating content:", content);
     setLoading(true);
 
-    update({ id: params.documentId, content })
+    update({ id: params.documentId as Id<"documents">, content })
       .then(() => setLoading(false))
       .catch((error) => {
         console.error("Failed to update content:", error);
