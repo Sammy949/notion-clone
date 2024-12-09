@@ -8,21 +8,31 @@ import { api } from "@/convex/_generated/api";
 import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useParams } from "next/navigation";
+import { Id } from "@/convex/_generated/dataModel";
 
-const DocumentIdPage = () => {
-  const { documentId } = useParams();
+interface DocumentIdPageProps {
+  params: Promise<{
+    documentId: string; // Adjusted type
+  }>;
+}
+
+export default async function DocumentIdPage({ params }: DocumentIdPageProps) {
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     []
   );
 
-  // @ts-ignore
-  const document = useQuery(api.documents.getById, { documentId: documentId });
+  // Await params to resolve
+  const resolvedParams = await params;
+  const documentId: Id<"documents"> =
+    resolvedParams.documentId as Id<"documents">;
+
+  const document = useQuery(api.documents.getById, {
+    documentId: documentId,
+  });
   const update = useMutation(api.documents.update);
 
   const onChange = (content: string) => {
-    // @ts-ignore
     update({ id: documentId, content });
   };
 
@@ -57,6 +67,4 @@ const DocumentIdPage = () => {
       </div>
     </div>
   );
-};
-
-export default DocumentIdPage;
+}
