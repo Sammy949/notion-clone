@@ -51,9 +51,21 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
           <div className="flex items-center gap-x-2">
             <Title initialData={document} />
             {loading ? (
-              <Spinner />
+              <div className="group flex items-center justify-center gap-x-2">
+                <Spinner />
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity ease-in-out duration-300">
+                  <p className="text-sm text-foreground-muted">
+                    Saving Changes
+                  </p>
+                </div>
+              </div>
             ) : (
-              <Check className="h-4 w-4 p-1 bg-green-600 rounded-full" />
+              <div className="group flex items-center justify-center gap-x-2">
+                <Check className="h-5 w-5 p-1 bg-green-600 rounded-full text-white font-bold" />
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity ease-in-out duration-300">
+                  <p className="text-sm text-foreground-muted">Note Saved!</p>
+                </div>
+              </div>
             )}
           </div>
           <div className="flex items-center gap-x-2">
