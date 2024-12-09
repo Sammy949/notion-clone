@@ -12,19 +12,23 @@ import { useLoading } from "@/context/LoadingContext";
 import { Id } from "@/convex/_generated/dataModel";
 
 interface DocumentIdPageProps {
-  params: {
+  params: Promise<{
     documentId: string; // Adjusted type
-  };
+  }>;
 }
 
-export default function DocumentIdPage({ params }: DocumentIdPageProps) {
+export default async function DocumentIdPage({ params }: DocumentIdPageProps) {
   const { setLoading } = useLoading();
 
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     []
   );
-  const documentId: Id<"documents"> = params.documentId as Id<"documents">;
+
+  // Await params to resolve
+  const resolvedParams = await params;
+  const documentId: Id<"documents"> =
+    resolvedParams.documentId as Id<"documents">;
 
   const document = useQuery(api.documents.getById, {
     documentId: documentId,
