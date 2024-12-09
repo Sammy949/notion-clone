@@ -7,17 +7,16 @@ import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
-
 import { useLoading } from "@/context/LoadingContext";
 import { Id } from "@/convex/_generated/dataModel";
 
 interface DocumentIdPageProps {
-  params: Promise<{
-    documentId: string; // Adjusted type
-  }>;
+  params: {
+    documentId: Id<"documents">;
+  };
 }
 
-export default async function DocumentIdPage({ params }: DocumentIdPageProps) {
+export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   const { setLoading } = useLoading();
 
   const Editor = useMemo(
@@ -25,13 +24,8 @@ export default async function DocumentIdPage({ params }: DocumentIdPageProps) {
     []
   );
 
-  // Await params to resolve
-  const resolvedParams = await params;
-  const documentId: Id<"documents"> =
-    resolvedParams.documentId as Id<"documents">;
-
   const document = useQuery(api.documents.getById, {
-    documentId: documentId,
+    documentId: params.documentId,
   });
 
   const update = useMutation(api.documents.update);
@@ -40,7 +34,7 @@ export default async function DocumentIdPage({ params }: DocumentIdPageProps) {
     console.log("Updating content:", content);
     setLoading(true);
 
-    update({ id: documentId, content })
+    update({ id: params.documentId, content })
       .then(() => setLoading(false))
       .catch((error) => {
         console.error("Failed to update content:", error);

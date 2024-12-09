@@ -42,6 +42,7 @@ const TrashBox = () => {
       error: "Failed to restore note.",
     });
   };
+
   const handleRemove = (documentId: Id<"documents">) => {
     const promise = remove({ id: documentId });
 
