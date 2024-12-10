@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
-const ErrorPage = () => {
+export default function NotFoundPage() {
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4">
       <Image
@@ -20,14 +20,13 @@ const ErrorPage = () => {
         height="300"
         width="300"
         alt="Error"
-        className="dark:block hidden"
+        className="hidden dark:block"
       />
-      <h2 className="text-xl font-medium">Something went wrong</h2>
+      <h2 className="text-xl font-medium">Not Found</h2>
+      <p>Could not find requested resource</p>
       <Button asChild>
-        <Link href="/documents">Go back</Link>
+        <Link href="/">Go back</Link>
       </Button>
     </div>
   );
-};
-
-export default ErrorPage;
+}

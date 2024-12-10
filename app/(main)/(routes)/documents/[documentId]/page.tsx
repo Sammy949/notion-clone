@@ -1,31 +1,31 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Toolbar } from "@/components/toolbar";
-import { Cover } from "@/components/cover";
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
-import { useLoading } from "@/context/LoadingContext";
+import { useMutation, useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
+import { api } from "@/convex/_generated/api";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Toolbar } from "@/components/toolbar";
+import { Cover } from "@/components/cover";
+import { useLoading } from "@/context/LoadingContext";
 
 interface DocumentIdPageProps {
-  params: {
-    documentId: string;
-  };
+  params: Promise<{ documentId: Id<"documents"> }>;
 }
 
-export default function DocumentIdPage({ params }: DocumentIdPageProps) {
+const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
+  const { documentId } = await params;
+
   const { setLoading } = useLoading();
 
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     []
   );
-  
+
   const document = useQuery(api.documents.getById, {
-    documentId: params.documentId as Id<"documents">,
+    documentId: documentId,
   });
 
   const update = useMutation(api.documents.update);
@@ -34,7 +34,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     console.log("Updating content:", content);
     setLoading(true);
 
-    update({ id: params.documentId as Id<"documents">, content })
+    update({ id: documentId, content })
       .then(() => setLoading(false))
       .catch((error) => {
         console.error("Failed to update content:", error);
@@ -74,4 +74,6 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default DocumentIdPage;
