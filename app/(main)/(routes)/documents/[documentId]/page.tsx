@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, use } from "react";
 import dynamic from "next/dynamic";
 import { useMutation, useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
@@ -11,12 +11,13 @@ import { Cover } from "@/components/cover";
 import { useLoading } from "@/context/LoadingContext";
 
 interface DocumentIdPageProps {
-  params: {
+  params: Promise<{
     documentId: string;
-  };
+  }>;
 }
 
-export default function DocumentIdPage({ params }: DocumentIdPageProps) {
+export default function DocumentIdPage(props: DocumentIdPageProps) {
+  const params = use(props.params);
   const { setLoading } = useLoading();
 
   const Editor = useMemo(
