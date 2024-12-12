@@ -11,24 +11,25 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Id } from "@/convex/_generated/dataModel";
 
 interface DocumentIdPageProps {
-  params: Promise<{ documentId: Id<"documents"> }>;
+  params: {
+    documentId: string;
+  };
 }
 
-const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
+const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     []
   );
 
-  const { documentId } = await params;
   const document = useQuery(api.documents.getById, {
-    documentId: documentId,
+    documentId: params.documentId as Id<"documents">,
   });
 
   const update = useMutation(api.documents.update);
 
   const onChange = (content: string) => {
-    update({ id: documentId, content });
+    update({ id: params.documentId as Id<"documents">, content });
   };
 
   if (document === undefined) {

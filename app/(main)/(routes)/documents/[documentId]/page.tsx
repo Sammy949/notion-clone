@@ -11,12 +11,12 @@ import { Cover } from "@/components/cover";
 import { useLoading } from "@/context/LoadingContext";
 
 interface DocumentIdPageProps {
-  params: Promise<{ documentId: Id<"documents"> }>;
+  params: {
+    documentId: string;
+  };
 }
 
-const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
-  const { documentId } = await params;
-
+export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   const { setLoading } = useLoading();
 
   const Editor = useMemo(
@@ -25,7 +25,7 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
   );
 
   const document = useQuery(api.documents.getById, {
-    documentId: documentId,
+    documentId: params.documentId as Id<"documents">,
   });
 
   const update = useMutation(api.documents.update);
@@ -34,7 +34,7 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
     console.log("Updating content:", content);
     setLoading(true);
 
-    update({ id: documentId, content })
+    update({ id: params.documentId as Id<"documents">, content })
       .then(() => setLoading(false))
       .catch((error) => {
         console.error("Failed to update content:", error);
@@ -74,6 +74,4 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
       </div>
     </div>
   );
-};
-
-export default DocumentIdPage;
+}
