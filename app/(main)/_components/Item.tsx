@@ -141,9 +141,8 @@ export const Item = ({
               side="right"
               forceMount
             >
-              {/* TODO: Make this color red */}
               <DropdownMenuItem onClick={handleArchive}>
-                <Trash className="h-4 w-4 mr-2" />
+                <Trash className="h-4 w-4 mr-2 text-rose-500" />
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />

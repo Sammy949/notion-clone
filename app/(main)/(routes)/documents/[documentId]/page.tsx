@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { useLoading } from "@/context/LoadingContext";
+import { toast } from "sonner";
 
 interface DocumentIdPageProps {
   params: Promise<{
@@ -38,6 +39,8 @@ export default function DocumentIdPage(props: DocumentIdPageProps) {
       .then(() => setLoading(false))
       .catch((error) => {
         console.error("Failed to update content:", error);
+        
+        toast.error("Failed to save changes to Jotter");
       });
   };
 
