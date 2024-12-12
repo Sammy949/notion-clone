@@ -32,7 +32,6 @@ export default function DocumentIdPage(props: DocumentIdPageProps) {
   const update = useMutation(api.documents.update);
 
   const onChange = (content: string) => {
-    console.log("Updating content:", content);
     setLoading(true);
 
     update({ id: params.documentId as Id<"documents">, content })
